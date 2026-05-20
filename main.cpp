@@ -1,3 +1,6 @@
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_error.h>
+#include <SDL2/SDL_video.h>
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
@@ -214,6 +217,19 @@ void executeCicle(chip8 &cpu) {
 }
 
 int main(int argc, char *argv[]) {
+  // creates a sdl2 window
+  SDL_Init(SDL_INIT_EVERYTHING);
+  SDL_Window *window =
+      SDL_CreateWindow("Chip8", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                       640, 320, SDL_WINDOW_SHOWN);
+
+  // check if windows is created, if not cloases the program
+  if (!window) {
+    std::cout << "Could not create window, ending program, error: "
+              << SDL_GetError() << std::endl;
+    return 1;
+  }
+
   // initialize chip8 as CHIP8 and run initialize func
   chip8 CHIP8;
   initChip8(CHIP8);
@@ -221,6 +237,7 @@ int main(int argc, char *argv[]) {
   int isNotLoaded = loadRom(CHIP8, argv[1]);
   if (isNotLoaded) {
     std::cout << "Ending program!" << std::endl;
+    return 1;
   }
   std::cout << "Rom loaded with sucess" << std::endl;
 
