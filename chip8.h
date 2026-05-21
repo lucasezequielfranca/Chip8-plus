@@ -12,6 +12,8 @@ public:
   uint8_t load_rom(char *filename);
   void execute_cycle();
 
+  std::array<uint8_t, 64 * 32> display;
+
 private:
   std::array<uint8_t, 4096> memory;
   uint16_t pc;
@@ -20,8 +22,6 @@ private:
   std::array<uint8_t, 16> v_register;
   uint8_t delay_timer;
   uint8_t sound_timer;
-
-  std::array<uint8_t, 64 * 32> display;
 
   std::array<uint8_t, 16> keypad;
 
