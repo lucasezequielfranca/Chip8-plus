@@ -11,8 +11,7 @@ public:
   void initialize();
   uint8_t load_rom(char *filename);
   void execute_cycle();
-
-  std::array<uint8_t, 64 * 32> display;
+  std::array<uint8_t, 64 * 32> gfx;
 
 private:
   std::array<uint8_t, 4096> memory;

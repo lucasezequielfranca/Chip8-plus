@@ -16,7 +16,7 @@ Chip8::Chip8() {
   v_register.fill(0);
   delay_timer = 0;
   sound_timer = 0;
-  display.fill(0);
+  gfx.fill(0);
 }
 Chip8::~Chip8() {}
 
@@ -65,7 +65,7 @@ void Chip8::execute_cycle() {
                 << std::endl;
       break;
     case 0xE0:
-      display.fill(0);
+      gfx.fill(0);
       break;
     }
     break;
@@ -100,10 +100,10 @@ void Chip8::execute_cycle() {
 
         uint16_t display_index =
             (base_coord_x + collum) + (((base_coord_y + row) * 64));
-        if (display[display_index] && bit) {
+        if (gfx[display_index] && bit) {
           v_register[0xF] = 1;
         }
-        display[display_index] ^= bit;
+        gfx[display_index] ^= bit;
         continue;
       }
     }
