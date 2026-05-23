@@ -10,7 +10,7 @@
 
 class Display {
 public:
-  Display(Chip8 &chip8);
+  Display();
   ~Display();
   void update_screen(Chip8 &chip8);
 
@@ -21,5 +21,5 @@ private:
 
   // this is chip8 display pixel array converted to sdl2 format
   // of pixel in rgba
-  std::array<uint32_t, 64 * 32> pixel_data;
+  std::array<uint32_t, Chip8::GFX_WIDTH * Chip8::GFX_HEIGHT> pixel_data;
 };

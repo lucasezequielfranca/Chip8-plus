@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     Chip8 chip8;
     chip8.initialize();
     chip8.load_rom(argv[1]);
-    Display display(chip8);
+    Display display;
 
     // starting time at system clock, this will get increaser every 1/60th of a
     // second, the rate of the chip8 timers. Bellow in the code chrono will

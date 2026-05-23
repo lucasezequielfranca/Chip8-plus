@@ -7,7 +7,7 @@
 #include <iostream>
 #include <stdexcept>
 
-Display::Display(Chip8 &chip8) {
+Display::Display() {
 
   pixel_data.fill(0); // fill pixel array with black
 
@@ -19,8 +19,8 @@ Display::Display(Chip8 &chip8) {
 
   // will try to create a sdl2 window
   window = SDL_CreateWindow("Chip8", SDL_WINDOWPOS_CENTERED,
-                            SDL_WINDOWPOS_CENTERED, chip8.GFX_WIDTH * 10,
-                            chip8.GFX_HEIGHT * 10, SDL_WINDOW_OPENGL);
+                            SDL_WINDOWPOS_CENTERED, Chip8::GFX_WIDTH * 10,
+                            Chip8::GFX_HEIGHT * 10, SDL_WINDOW_OPENGL);
   if (!window) {
     std::cout << "Error: " << SDL_GetError() << std::endl;
     throw std::runtime_error("Could not create a window");
@@ -35,8 +35,8 @@ Display::Display(Chip8 &chip8) {
 
   // will try to create a sdl2 texture where we put our pixel array
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32,
-                              SDL_TEXTUREACCESS_STREAMING, chip8.GFX_WIDTH,
-                              chip8.GFX_HEIGHT);
+                              SDL_TEXTUREACCESS_STREAMING, Chip8::GFX_WIDTH,
+                              Chip8::GFX_HEIGHT);
 }
 Display::~Display() {}
 
@@ -51,7 +51,7 @@ void Display::update_screen(Chip8 &chip8) {
   // update the texture by using the pixel data of the screen, and cutting it in
   // rows every GFX_WIDTH * sizer o pixel uint32 in formtat 0xFFFFFFF
   SDL_UpdateTexture(texture, NULL, pixel_data.data(),
-                    chip8.GFX_WIDTH * sizeof(uint32_t));
+                    Chip8::GFX_WIDTH * sizeof(uint32_t));
 
   // copy the texture into the render, the null bellow is to use whole texture
   // mapped to whole render
