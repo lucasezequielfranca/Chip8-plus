@@ -20,6 +20,13 @@ Chip8::Chip8() {
   update_screen_flag = 0;
   instructions_per_second = 700;
   running_flag = 1;
+  opcode = 0;
+  type = 0;
+  X = 0;
+  Y = 0;
+  N = 0;
+  NN = 0;
+  NNN = 0;
 }
 Chip8::~Chip8() {}
 
@@ -47,18 +54,18 @@ uint8_t Chip8::load_rom(char *filename) {
 }
 
 void Chip8::execute_cycle() {
-  uint16_t opcode = (memory[pc] << 8) | memory[pc + 1];
+  opcode = (memory[pc] << 8) | memory[pc + 1];
   std::cout << "Decoding opcode: " << std::hex << opcode << std::endl;
 
   pc += 2;
 
-  uint8_t type = (opcode & 0xF000) >> 12;
+  type = (opcode & 0xF000) >> 12;
 
-  uint8_t X = (opcode & 0x0F00) >> 8;
-  uint8_t Y = (opcode & 0x00F0) >> 4;
-  uint8_t N = opcode & 0x000F;
-  uint8_t NN = opcode & 0x00FF;
-  uint16_t NNN = opcode & 0x0FFF;
+  X = (opcode & 0x0F00) >> 8;
+  Y = (opcode & 0x00F0) >> 4;
+  N = opcode & 0x000F;
+  NN = opcode & 0x00FF;
+  NNN = opcode & 0x0FFF;
 
   switch (type) {
   case 0x0:

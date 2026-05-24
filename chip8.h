@@ -27,6 +27,15 @@ private:
   uint8_t delay_timer;
   uint8_t sound_timer;
 
+  // opcode pointers for deconding
+  uint16_t opcode;
+  uint8_t type;
+  uint8_t X;
+  uint8_t Y;
+  uint8_t N;
+  uint8_t NN;
+  uint16_t NNN;
+
   std::array<uint8_t, 16> keypad;
 
   inline static std::array<uint8_t, 80> FONT_SET = {
