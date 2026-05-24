@@ -1,9 +1,12 @@
 #include "display.h"
 #include "chip8.h"
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_events.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 #include <cstdint>
+#include <endian.h>
 #include <iostream>
 #include <stdexcept>
 
@@ -38,7 +41,12 @@ Display::Display() {
                               SDL_TEXTUREACCESS_STREAMING, Chip8::GFX_WIDTH,
                               Chip8::GFX_HEIGHT);
 }
-Display::~Display() {}
+Display::~Display() {
+  SDL_DestroyRenderer(renderer);
+  SDL_DestroyTexture(texture);
+  SDL_DestroyWindow(window);
+  SDL_Quit();
+}
 
 void Display::update_screen(Chip8 &chip8) {
   // converts my chip8 gfx array to a pixel data in rgba format for sdl2
@@ -58,4 +66,13 @@ void Display::update_screen(Chip8 &chip8) {
   SDL_RenderCopy(renderer, texture, NULL, NULL);
   // render the preser renderer to the screen
   SDL_RenderPresent(renderer);
+}
+
+void Display::handle_events(Chip8 &chip8) {
+  while (SDL_PollEvent(&event) != 0) {
+    switch (event.type) {
+    case SDL_QUIT:
+      chip8.running_flag = 0;
+    }
+  }
 }

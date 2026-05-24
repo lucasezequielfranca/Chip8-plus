@@ -15,7 +15,8 @@ public:
   inline static constexpr uint8_t GFX_HEIGHT = 32;
   std::array<uint8_t, GFX_WIDTH * GFX_HEIGHT> gfx; // display array
   uint8_t update_screen_flag;                      // flag to update screen
-  uint8_t instructions_per_second;
+  uint16_t instructions_per_second;
+  uint8_t running_flag;
 
 private:
   std::array<uint8_t, 4096> memory;
