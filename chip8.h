@@ -17,6 +17,7 @@ public:
   uint8_t update_screen_flag;                      // flag to update screen
   uint16_t instructions_per_second;
   uint8_t running_flag;
+  uint8_t basic_emulator_flag;
 
 private:
   std::array<uint8_t, 4096> memory;

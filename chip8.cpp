@@ -1,6 +1,7 @@
 #include "chip8.h"
 #include <algorithm>
 #include <cstdint>
+#include <cstdlib>
 #include <fstream>
 #include <ios>
 #include <iostream>
@@ -28,6 +29,7 @@ Chip8::Chip8() {
   N = 0;
   NN = 0;
   NNN = 0;
+  basic_emulator_flag = 0;
 }
 Chip8::~Chip8() {}
 
@@ -126,26 +128,56 @@ void Chip8::execute_cycle() {
       std::cout << "Could Not decode opcode: " << static_cast<int>(opcode)
                 << std::endl;
       break;
-    case 0:
+    case 0x0:
       v_register[X] = v_register[Y];
       break;
-    case 1:
+    case 0x1:
       v_register[X] = (v_register[X] | v_register[Y]);
       break;
-    case 2:
+    case 0x2:
       v_register[X] = (v_register[X] & v_register[Y]);
       break;
-    case 3:
+    case 0x3:
       v_register[X] = (v_register[X] ^ v_register[Y]);
       break;
-    case 4:
+    case 0x4: {
       uint8_t sum = (v_register[X] + v_register[Y]);
-      v_register[0xF] = 0;
-      if (v_register[X] > sum) {
-        v_register[0xF] = 1;
-      }
+      uint8_t carry = (v_register[X] > sum) ? 1 : 0;
+
       v_register[X] = sum;
+      v_register[0xF] = carry;
       break;
+    }
+    case 0x5: {
+      uint8_t vf_flag = (v_register[X] >= v_register[Y]) ? 1 : 0;
+      v_register[X] = (v_register[X] - v_register[Y]);
+      v_register[0xF] = vf_flag;
+      break;
+    }
+    case 0x6: {
+      if (basic_emulator_flag) {
+        v_register[X] = v_register[Y];
+      }
+      uint8_t carry = (v_register[X] & 0x1);
+      v_register[X] >>= 1;
+      v_register[0xF] = carry;
+      break;
+    }
+    case 0x7: {
+      uint8_t vf_flag = (v_register[Y] >= v_register[X]) ? 1 : 0;
+      v_register[X] = (v_register[Y] - v_register[X]);
+      v_register[0xF] = vf_flag;
+      break;
+    }
+    case 0xE: {
+      if (basic_emulator_flag) {
+        v_register[X] = v_register[Y];
+      }
+      uint8_t carry = (v_register[X] & 0x80) >> 7;
+      v_register[X] <<= 1;
+      v_register[0xF] = carry;
+      break;
+    }
     }
     break;
   case 0x9:
@@ -155,6 +187,16 @@ void Chip8::execute_cycle() {
     break;
   case 0xA:
     i = NNN;
+    break;
+  case 0xB:
+    if (basic_emulator_flag) {
+      pc = NNN + v_register[0];
+    } else {
+      pc = ((X << 8) | NN) + v_register[X];
+    }
+    break;
+  case 0xC:
+    v_register[X] = (rand() & NN);
     break;
   case 0xD:
     uint8_t base_coord_x = v_register[X] & 63;
