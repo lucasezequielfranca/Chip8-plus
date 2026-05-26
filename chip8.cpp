@@ -30,6 +30,7 @@ Chip8::Chip8() {
   NN = 0;
   NNN = 0;
   basic_emulator_flag = 0;
+  keypad.fill(0);
 }
 Chip8::~Chip8() {}
 
@@ -58,7 +59,7 @@ uint8_t Chip8::load_rom(char *filename) {
 
 void Chip8::execute_cycle() {
   opcode = (memory[pc] << 8) | memory[pc + 1];
-  std::cout << "Decoding opcode: " << std::hex << opcode << std::endl;
+  // std::cout << "Decoding opcode: " << std::hex << opcode << std::endl;
 
   pc += 2;
 
@@ -72,13 +73,13 @@ void Chip8::execute_cycle() {
 
   switch (type) {
   default:
-    std::cout << "Could Not decode opcode: " << static_cast<int>(opcode)
+    std::cout << "Could Not decode opcode: " << std::hex << (opcode)
               << std::endl;
     break;
   case 0x0:
     switch (NN) {
     default:
-      std::cout << "Could Not decode opcode: " << static_cast<int>(opcode)
+      std::cout << "Could Not decode opcode: " << std::hex << (opcode)
                 << std::endl;
       break;
     case 0xE0:
@@ -125,7 +126,7 @@ void Chip8::execute_cycle() {
   case 0x8:
     switch (N) {
     default:
-      std::cout << "Could Not decode opcode: " << static_cast<int>(opcode)
+      std::cout << "Could Not decode opcode: " << std::hex << (opcode)
                 << std::endl;
       break;
     case 0x0:
@@ -198,7 +199,7 @@ void Chip8::execute_cycle() {
   case 0xC:
     v_register[X] = (rand() & NN);
     break;
-  case 0xD:
+  case 0xD: {
     uint8_t base_coord_x = v_register[X] & 63;
     uint8_t base_coord_y = v_register[Y] & 31;
     v_register[0xF] = 0;
@@ -224,6 +225,24 @@ void Chip8::execute_cycle() {
         continue;
       }
       update_screen_flag = 1;
+    }
+    break;
+  }
+  case 0xE:
+    switch (NN) {
+    default:
+      std::cout << "Could Not decode opcode: " << std::hex << (opcode)
+                << std::endl;
+      break;
+    }
+  case 0x9E:
+    if (keypad[v_register[X]]) {
+      pc += 2;
+    }
+    break;
+  case 0xA1:
+    if (!keypad[v_register[X]]) {
+      pc += 2;
     }
     break;
   }

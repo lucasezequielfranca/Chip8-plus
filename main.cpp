@@ -3,7 +3,9 @@
 #include <chrono>
 #include <cstdint>
 #include <iostream>
+#include <ostream>
 #include <stdexcept>
+#include <sys/types.h>
 #include <thread>
 
 uint8_t exit_program();
@@ -35,6 +37,9 @@ int main(int argc, char *argv[]) {
         chip8.execute_cycle();
         display.handle_events(chip8);
 
+        if (chip8.keypad[0] == 1) {
+          std::cout << "alterou" << std::endl;
+        }
         // checks if the screen have any changes if so updates it
         if (chip8.update_screen_flag) {
           display.update_screen(chip8);

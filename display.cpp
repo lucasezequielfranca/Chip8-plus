@@ -2,6 +2,7 @@
 #include "chip8.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
+#include <SDL2/SDL_keycode.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
@@ -11,6 +12,16 @@
 #include <stdexcept>
 
 Display::Display(Chip8 &chip8) {
+
+  // uses pattern:
+  // number of key in array
+  //  1 2  3 12
+  //  4 5  6 13
+  //  7 8  9 14
+  // 10 0 11 15
+  configurable_keys = {SDLK_x, SDLK_1, SDLK_2, SDLK_3, SDLK_q, SDLK_w,
+                       SDLK_e, SDLK_a, SDLK_s, SDLK_d, SDLK_z, SDLK_c,
+                       SDLK_4, SDLK_r, SDLK_f, SDLK_v};
 
   pixel_data.fill(0); // fill pixel array with black
 
@@ -73,6 +84,27 @@ void Display::handle_events(Chip8 &chip8) {
     switch (event.type) {
     case SDL_QUIT:
       chip8.running_flag = 0;
+      break;
+    case SDL_KEYDOWN: {
+      SDL_Keycode key = event.key.keysym.sym;
+
+      for (uint8_t i = 0; i < 16; i++) {
+        if (key == configurable_keys[i]) {
+
+          chip8.keypad[i] = 1;
+        }
+      }
+      break;
+    }
+    case SDL_KEYUP: {
+      SDL_Keycode key = event.key.keysym.sym;
+      for (uint8_t i = 0; i < 16; i++) {
+        if (key == configurable_keys[i]) {
+          chip8.keypad[i] = 0;
+        }
+      }
+      break;
+    } break;
     }
   }
 }

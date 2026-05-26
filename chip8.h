@@ -18,6 +18,7 @@ public:
   uint16_t instructions_per_second;
   uint8_t running_flag;
   uint8_t basic_emulator_flag;
+  std::array<uint8_t, 16> keypad;
 
 private:
   std::array<uint8_t, 4096> memory;
@@ -37,8 +38,6 @@ private:
   uint8_t N;
   uint8_t NN;
   uint16_t NNN;
-
-  std::array<uint8_t, 16> keypad;
 
   inline static std::array<uint8_t, 80> FONT_SET = {
       0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
