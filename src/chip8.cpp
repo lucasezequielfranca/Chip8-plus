@@ -3,8 +3,8 @@
 #include <cstdint>
 #include <cstdlib>
 #include <fstream>
-#include <ios>
 #include <iomanip>
+#include <ios>
 #include <iostream>
 #include <iterator>
 #include <ostream>
@@ -67,7 +67,6 @@ void Chip8::execute_cycle() {
   opcode = (memory[pc] << 8) | memory[pc + 1];
   step++;
 
-
   type = (opcode & 0xF000) >> 12;
 
   X = (opcode & 0x0F00) >> 8;
@@ -77,36 +76,36 @@ void Chip8::execute_cycle() {
   NNN = opcode & 0x0FFF;
 
   if (debug_mode == 1) {
-    std:: cout << "step: " << std::dec << step << std::endl;
-    std::cout << std::left
-      << "pc: 0x" << std::setw(6) << std::hex << pc
-      << "| OPcode: 0x" << std::setw(6) << +(opcode )
-      << "| X: 0x" << std::setw(4) << +X 
-      << "| Y: 0x" << std::setw(4) << +Y
-      << "| N: 0x" << std::setw(4) << +N 
-      << "| NN: 0x" << std::setw(4) << +NN 
-      << "| NNN: 0x" << std::setw(6) << +NNN
-      << "I: 0x" << std::hex << std::setw(6) << i 
-      << std::endl << std::string(100, '-') << std::endl;
+    std::cout << "step: " << std::dec << step << std::endl;
+    std::cout << std::left << "pc: 0x" << std::setw(6) << std::hex << pc
+              << "| OPcode: 0x" << std::setw(6) << +(opcode) << "| X: 0x"
+              << std::setw(4) << +X << "| Y: 0x" << std::setw(4) << +Y
+              << "| N: 0x" << std::setw(4) << +N << "| NN: 0x" << std::setw(4)
+              << +NN << "| NNN: 0x" << std::setw(6) << +NNN << "I: 0x"
+              << std::hex << std::setw(6) << i << std::endl
+              << std::string(100, '-') << std::endl;
     for (uint8_t i = 0; i < 8; i++) {
-      std::cout << 
-        "| V" << static_cast<int>(i) << ": 0x" << std::hex << std::setw(4) << +v_register[i] ;
+      std::cout << "| V" << static_cast<int>(i) << ": 0x" << std::hex
+                << std::setw(4) << +v_register[i];
     }
     std::cout << std::endl;
     for (uint8_t i = 8; i < 16; i++) {
-      std::cout << 
-        "| V" << static_cast<int>(i) << ": 0x" << std::hex << std::setw(4) << +v_register[i] ;
+      std::cout << "| V" << static_cast<int>(i) << ": 0x" << std::hex
+                << std::setw(4) << +v_register[i];
     }
     std::cout << std::endl << std::string(100, '-') << std::endl;
     std::cout << std::left << "stack: " << std::endl;
     if (stack_pointer > 0) {
-      for (uint8_t counter = stack_pointer ; counter > 0; counter--) {
-        std::cout << "| S" << static_cast<int>(stack_pointer - 1) << "["  <<
-          std::hex << std::setw(8) << stack[counter - 1] << "]" << std::endl;
+      for (uint8_t counter = stack_pointer; counter > 0; counter--) {
+        std::cout << "| S" << static_cast<int>(stack_pointer - 1) << "["
+                  << std::hex << std::setw(8) << stack[counter - 1] << "]"
+                  << std::endl;
+      }
     }
-
-    }
-    std::cout << std::endl << std::string(100, '-') << std::endl << std::endl << std::endl;
+    std::cout << std::endl
+              << std::string(100, '-') << std::endl
+              << std::endl
+              << std::endl;
   }
 
   pc += 2;
@@ -117,12 +116,9 @@ void Chip8::execute_cycle() {
     break;
   case 0x0:
     switch (NN) {
-    default:
-      std::cout << "Could Not decode opcode: " << std::hex << (opcode)
-                << std::endl;
-      break;
     case 0xE0:
       gfx.fill(0);
+      update_screen_flag = 1;
       break;
     case 0xEE:
       stack_pointer--;
@@ -251,37 +247,39 @@ void Chip8::execute_cycle() {
       }
       for (int collum = 0; collum < 8; collum++) {
         if ((base_coord_x + collum) >= 64) {
-          continue;
+          break;
         }
-        uint8_t bit = (0x80 >> collum) & sprite_data;
+        uint8_t bit = (((0x80 >> collum) & sprite_data));
+        if (bit) {
+          bit = 1;
+        } else {
+          bit = 0;
+        }
 
         uint16_t display_index =
             (base_coord_x + collum) + (((base_coord_y + row) * 64));
         if (gfx[display_index] && bit) {
           v_register[0xF] = 1;
         }
-        gfx[display_index] ^= bit;
+        gfx[display_index] = (gfx[display_index] ^ bit);
         continue;
       }
-      update_screen_flag = 1;
     }
+    update_screen_flag = 1;
     break;
   }
   case 0xE:
     switch (NN) {
-    default:
-      std::cout << "Could Not decode opcode: " << std::hex << (opcode)
-                << std::endl;
+    case 0x9E:
+      if (keypad[v_register[X] & 0x0F]) {
+        pc += 2;
+      }
       break;
-    }
-  case 0x9E:
-    if (keypad[v_register[X]]) {
-      pc += 2;
-    }
-    break;
-  case 0xA1:
-    if (!keypad[v_register[X]]) {
-      pc += 2;
+    case 0xA1:
+      if (!(keypad[v_register[X] & 0x0F])) {
+        pc += 2;
+      }
+      break;
     }
     break;
   case 0xF:
@@ -341,32 +339,32 @@ void Chip8::execute_cycle() {
     }
     case 0x55: {
       if (basic_emulator_flag) {
-        for (uint8_t j = 0; j < 16; j++) {
+        for (uint8_t j = 0; j <= X; j++) {
           memory[i] = v_register[j];
           i++;
         }
         break;
       } else {
-        for (uint8_t j = 0; j < 16; j++) {
+        for (uint8_t j = 0; j <= X; j++) {
           memory[i + j] = v_register[j];
-          break;
         }
+        break;
       }
     }
     case 0x65: {
       if (basic_emulator_flag) {
-        for (uint8_t j = 0; j < 16; j++) {
+        for (uint8_t j = 0; j <= X; j++) {
           v_register[j] = memory[i];
           i++;
         }
         break;
       } else {
-        for (uint8_t j = 0; j < 16; j++) {
+        for (uint8_t j = 0; j <= X; j++) {
           v_register[j] = memory[i + j];
-          break;
         }
+        break;
       }
-    }
+    } break;
     }
   }
 }

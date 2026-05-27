@@ -60,9 +60,12 @@ Display::~Display() {
 }
 
 void Display::update_screen(Chip8 &chip8) {
+  if (!chip8.update_screen_flag) {
+    return;
+  }
   // converts my chip8 gfx array to a pixel data in rgba format for sdl2
   for (uint16_t i = 0, size = chip8.gfx.size(); i < size; i++) {
-    chip8.gfx[i] ? pixel_data[i] = 0x33FF33FF : 0x0A140AFF;
+    pixel_data[i] = chip8.gfx[i] ? 0x33FF33FF : 0x0A140AFF;
   }
   // clear the renderer for the next screen
   SDL_RenderClear(renderer);
@@ -77,6 +80,7 @@ void Display::update_screen(Chip8 &chip8) {
   SDL_RenderCopy(renderer, texture, NULL, NULL);
   // render the preser renderer to the screen
   SDL_RenderPresent(renderer);
+  chip8.update_screen_flag = 0;
 }
 
 void Display::handle_events(Chip8 &chip8) {

@@ -37,29 +37,24 @@ int main(int argc, char *argv[]) {
       start_time += std::chrono::microseconds(16660);
 
       display.handle_events(chip8);
-
       // executes deafult = 12 instructions per loop, 12 * 60 (loops
       // per seconds), results in ~700 instructions per second, pretty close to
       // default chip8
-      for (uint8_t i = 0, target = chip8.instructions_per_second / 60; i < target; i++) {
+      for (uint8_t i = 0, target = chip8.instructions_per_second / 60;
+           i < target; i++) {
         chip8.execute_cycle();
-        
+        display.update_screen(chip8);
         // checks if the screen have any changes if so updates it
-        if (chip8.update_screen_flag) {
-          display.update_screen(chip8);
-          chip8.update_screen_flag = 0;
-        }
         if (chip8.debug_mode) {
           std::cout << "Press Enter to go one step in: " << std::endl;
           std::cin.get();
         }
       }
-      chip8.decrease_timers();
 
+      chip8.decrease_timers();
 
       std::this_thread::sleep_until(start_time);
     }
-
   } catch (std::runtime_error e) {
     std::cout << e.what() << std::endl;
   }
