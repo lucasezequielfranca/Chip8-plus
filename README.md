@@ -42,7 +42,4 @@ When navigating through the test menus, old sprites would smear across the new o
 
 ### Dependencies
 You need a working compiler with C++17 support and the **SDL2** library installed on your system.
-
-On Arch Linux / CachyOS:
-```bash
-sudo pacman -S sdl2
+I've only tested in arch linux, so windows support may not be working
