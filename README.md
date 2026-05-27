@@ -38,19 +38,21 @@ original chip-8 keypad        mine interpreter keypad
 
 ---
 
-* **Usage:**
-```bash
-./chip8 <path-to-rom> [--debug]
-```
-
----
-
 ## 🔧 How to Compile and Run
 ### Compiling
 Without using a Makefile you will need to use the follow command at root folder:
 ```bash
 # Using g++
 g++ src/*.cpp -o chip8 -std=c++17 -lSDL2
+
+---
+
+* *Running:**
+```bash
+./chip8 <path-to-rom> [--debug]
+```
+
+---
 
 # Using clang++
 clang++ src/*.cpp -o chip8 -std=c++17 -lSDL2
