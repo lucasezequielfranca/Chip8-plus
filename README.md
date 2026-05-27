@@ -1,15 +1,15 @@
 # CHIP-8 Interpreter
 
-A simple CHIP-8 interpreter written in C++ and SDL2 for graphics. Made to study emulation, low-level concepts, and how a CPU cycle works. The interpreter was tested with Timendius chip8 test suit, wich is included in roms folder.
+A simple CHIP-8 interpreter written in C++ and SDL2 for graphics. Made to study emulation, low-level concepts, and how a CPU cycle works. The interpreter was tested with Timendius chip8 test suite, which is included in roms folder.
 
-The interpreter runs with default CHIP-8 resolutin but have the super-chip quirks enabled as it is required for most games.
+The interpreter runs with default CHIP-8 resolution but has the super-chip quirks enabled as it is required for most games.
 
 ---
 
 * **Instruction Cycle (Fetch-Decode-Execute):** Basic cycle implemented, running instructions straight from memory.
 * **Clock Sync:** The Cycle runs freely inside a batch of instructions per frame (~700 Hz), while the Timers and the screen renderer run locked at 60 Hz using `std::chrono`.
-* **Log debugger:** Fully functinal log debbugger, with a option to toggle step by step (input wont work in this mode).
-* **Settings**: Configurable colors and keyboard key inside display.cpp and instructions pre frame inside chip8.cpp.
+* **Log debugger:** Fully functional log debugger, with an option to toggle step by step (input won't work in this mode).
+* **Settings**: Configurable colors and keyboard key inside display.cpp and instructions per frame inside chip8.cpp.
 * **Keypad**: Default keypad works using the following map:
 ```text
 original chip-8 keypad        mine interpreter keypad
@@ -25,7 +25,7 @@ original chip-8 keypad        mine interpreter keypad
 
 * **Pong:** Fully functional and playable. 
 * **Timendius Test Suit:** Passing all checks on the modern behavior screen (with Shift, Memory, and Jump flags enabled).
-* **Images bellow:**
+* **Images below:**
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/c6e5db39-3efa-485e-946d-9a08db335aa8" alt="Chip-8 Interpreter Running" width="100%"></td>
@@ -48,7 +48,7 @@ original chip-8 keypad        mine interpreter keypad
 
 ## 🔧 How to Compile and Run
 ### Compiling
-Without using make file you will need to use the follow command at root folder:
+Without using a Makefile you will need to use the follow command at root folder:
 ```bash
 # Using g++
 g++ src/*.cpp -o chip8 -std=c++17 -lSDL2
@@ -59,4 +59,4 @@ clang++ src/*.cpp -o chip8 -std=c++17 -lSDL2
 
 ### Dependencies
 You need a working compiler with C++17 support and the **SDL2** library installed on your system.
-I've only tested in arch linux, so windows support may not be working
+I've only tested it on Arch Linux, so windows support may not be working
