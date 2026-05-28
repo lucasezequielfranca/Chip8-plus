@@ -1,6 +1,6 @@
 # CHIP-8++
 
-A CHIP-8 interpreter written in C++ and SDL2 for graphics. Made to study emulation, low-level concepts, and how a CPU cycle works. The interpreter was tested with Timendius chip8 test suite, which is included in roms folder.
+A CHIP-8 interpreter written in C++ and SDL2 for graphics. Made to study emulation, low-level concepts, and how a CPU cycle works. The interpreter was tested with Timendus chip8 test suite, which is included in roms folder.
 
 The interpreter runs with default CHIP-8 resolution but has the super-chip quirks enabled as it is required for most games.
 
@@ -24,7 +24,7 @@ original chip-8 keypad        mine interpreter keypad
 ## 🕹️ Test Status
 
 * **Pong:** Fully functional and playable. 
-* **Timendius Test Suite:** Passing all checks on the modern behavior screen (with Shift, Memory, and Jump flags enabled).
+* **Timendus Test Suite:** Passing all checks on the modern behavior screen (with Shift, Memory, and Jump flags enabled).
 <table>
   <tr>
     <td><img src="https://github.com/user-attachments/assets/c6e5db39-3efa-485e-946d-9a08db335aa8" alt="Chip-8 Interpreter Running" width="100%"></td>
